@@ -11,7 +11,7 @@ const SocialStep: React.FC = () => {
   const socialLinks = data.socialLinks || {};
   const previousDataRef = React.useRef<SocialLinks>();
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<SocialLinks>({
+  const { register, watch, setValue, formState: { errors } } = useForm<SocialLinks>({
     defaultValues: socialLinks,
     mode: 'onChange',
   });
