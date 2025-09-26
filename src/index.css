@@ -1,0 +1,68 @@
+/* Mevcut Tailwind CSS import'ları */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global form input stilleri - tüm sayfalarda text görünür olması için */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="search"],
+input[type="time"],
+input[type="week"],
+textarea,
+select {
+  color: #111827 !important; /* Koyu gri text */
+  background-color: white !important; /* Beyaz arka plan */
+}
+
+/* Placeholder text stilleri */
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF !important; /* Açık gri placeholder */
+  opacity: 1; /* Firefox için */
+}
+
+/* Focus durumunda da text görünür olması */
+input:focus,
+textarea:focus,
+select:focus {
+  color: #111827 !important;
+  background-color: white !important;
+}
+
+/* Disabled input'lar için */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: #6B7280 !important;
+  background-color: #F9FAFB !important;
+}
+
+/* React Hook Form ile kullanılan input'lar için ekstra garanti */
+.form-input {
+  color: #111827 !important;
+  background-color: white !important;
+}
+
+/* Date picker input'ları için özel stil */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+}
+
+/* File input'lar için */
+input[type="file"] {
+  color: #111827 !important;
+}
+
+/* Select dropdown'lar için */
+select option {
+  color: #111827 !important;
+  background-color: white !important;
+}
