@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import ParticleBackground from './components/ParticleBackground';
 import ThemeSelector from './components/ThemeSelector';
 import FormWizard from './components/FormWizard/FormWizard';
@@ -12,7 +11,7 @@ type AppMode = 'landing' | 'form' | 'preview' | 'generating' | 'export';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('landing');
-  const { data, isGenerating } = usePortfolioStore();
+  const {} = usePortfolioStore();
 
   // Handle generation event
   useEffect(() => {
