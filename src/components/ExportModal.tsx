@@ -46,7 +46,8 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+                title="Close modal"
               >
                 <X className="w-6 h-6" />
               </button>

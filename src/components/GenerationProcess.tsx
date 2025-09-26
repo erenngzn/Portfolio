@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Code, Palette, Download, Sparkles } from 'lucide-react';
+import { Check, Code, Palette, Sparkles } from 'lucide-react';
 import { usePortfolioStore } from '../store/portfolioStore';
 
 const generationSteps = [
@@ -20,23 +20,25 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
   const [confetti, setConfetti] = useState(false);
 
   useEffect(() => {
-    const stepDuration = 1500; // 1.5 seconds per step
+    const stepDuration = 4000; // 4 seconds per step (extended from 1.5s)
+    const stepDelay = 800; // 800ms delay between each step for smooth transitions
     
     generationSteps.forEach((_, index) => {
       setTimeout(() => {
         setCurrentStep(index + 1);
         setGenerationProgress(((index + 1) / generationSteps.length) * 100);
-      }, (index + 1) * stepDuration);
+      }, (index + 1) * stepDuration + index * stepDelay);
     });
 
-    // Complete the process
+    // Complete the process with extended timing
+    const totalDuration = generationSteps.length * stepDuration + (generationSteps.length - 1) * stepDelay;
     setTimeout(() => {
       setConfetti(true);
       setTimeout(() => {
         setGenerating(false);
         onComplete();
-      }, 2000);
-    }, generationSteps.length * stepDuration + 500);
+      }, 3000); // Extended confetti duration
+    }, totalDuration + 1000);
 
   }, [setGenerating, setGenerationProgress, onComplete]);
 
@@ -46,7 +48,7 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }} // Smooth cubic-bezier easing
         className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative overflow-hidden"
       >
         {confetti && (

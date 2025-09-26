@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Monitor, Smartphone, ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
+import { Monitor, Smartphone, ExternalLink } from 'lucide-react';
 import { usePortfolioStore } from '../store/portfolioStore';
 import { themes } from '../data/themes';
 
@@ -15,8 +15,8 @@ const LivePreview: React.FC = () => {
   }, [viewMode]);
   
   const selectedTheme = themes.find(theme => theme.id === data.selectedTheme) || themes[0];
-  const personalInfo = data.personalInfo || {};
-  const about = data.about || {};
+  const personalInfo = data.personalInfo || {} as any;
+  const about = data.about || {} as any;
   const experiences = data.experience || [];
   const projects = data.projects || [];
 
@@ -152,7 +152,7 @@ const LivePreview: React.FC = () => {
                       <div className="mb-12">
                         <h3 className="text-xl font-semibold mb-6 text-center">Skills & Technologies</h3>
                         <div className="flex flex-wrap justify-center gap-3">
-                          {about.skills.map((skill, index) => (
+                          {about.skills.map((skill: string, index: number) => (
                             <motion.span
                               key={index}
                               initial={{ scale: 0 }}
@@ -202,6 +202,65 @@ const LivePreview: React.FC = () => {
                             )}
                           </motion.div>
                         ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Resume/CV Section */}
+                {data.resumeFile && (
+                  <div className="py-16 px-6" style={{ backgroundColor: selectedTheme.colors.card + '40' }}>
+                    <div className="max-w-4xl mx-auto text-center">
+                      <h2 className="text-3xl font-bold mb-8" style={{ color: selectedTheme.colors.primary }}>
+                        Resume / CV
+                      </h2>
+                      <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
+                        <div className="flex flex-col items-center space-y-4">
+                          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                            <span className="text-2xl text-white">📄</span>
+                          </div>
+                          <h3 className="text-xl font-semibold text-gray-900">
+                            {personalInfo.fullName || 'Resume'}_Resume.pdf
+                          </h3>
+                          <p className="text-gray-600 mb-6">
+                            Download my complete resume to learn more about my background and experience.
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-4">
+                            <button 
+                              className="px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105 shadow-md"
+                              style={{ 
+                                backgroundColor: selectedTheme.colors.primary,
+                                color: 'white'
+                              }}
+                              onClick={() => {
+                                // Create download link for resume
+                                if (data.resumeFile) {
+                                  const link = document.createElement('a');
+                                  link.href = data.resumeFile;
+                                  link.download = `${personalInfo.fullName || 'Resume'}_Resume.pdf`;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+                                }
+                              }}
+                            >
+                              📥 Download Resume
+                            </button>
+                            <button 
+                              className="px-6 py-3 rounded-lg font-medium border-2 transition-all hover:bg-gray-50"
+                              style={{ 
+                                borderColor: selectedTheme.colors.primary,
+                                color: selectedTheme.colors.primary
+                              }}
+                              onClick={() => {
+                                // Open resume in new tab for preview
+                                window.open(data.resumeFile, '_blank');
+                              }}
+                            >
+                              👁️ Preview Resume
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
