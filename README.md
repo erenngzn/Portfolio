@@ -12,7 +12,7 @@ TypeScript ile geliştirilmiş olup, ölçeklenebilir ve modern bir mimariye sah
 
 ## 🛠️ Teknolojiler
 - **Frontend:** TypeScript  
-- **Framework/Library:** (React, Next.js veya kullandığın yapıyı buraya yazabilirsin)  
+- **Framework/Library:** (React, Next.js)  
 - **Styling:** (TailwindCSS, Styled Components, vb.)  
 - **Backend (opsiyonel):** (Node.js, Express, vb. varsa yaz)  
 
