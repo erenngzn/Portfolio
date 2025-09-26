@@ -10,12 +10,6 @@ TypeScript ile geliştirilmiş olup, ölçeklenebilir ve modern bir mimariye sah
 - Modern, esnek ve responsive tasarımlar  
 - TypeScript tabanlı güvenli ve sürdürülebilir kod yapısı  
 
-## 🛠️ Teknolojiler
-- **Frontend:** TypeScript  
-- **Framework/Library:** (React, Next.js)  
-- **Styling:** (TailwindCSS, Styled Components, vb.)  
-- **Backend (opsiyonel):** (Node.js, Express, vb. varsa yaz)  
-
 ## 🚀 Başlangıç
 Projeyi yerel ortamda çalıştırmak için:
 
