@@ -41,16 +41,19 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
   }, [setGenerating, setGenerationProgress, onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative overflow-hidden"
       >
         {confetti && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
             className="absolute inset-0 pointer-events-none"
           >
             {[...Array(20)].map((_, i) => (
@@ -60,14 +63,17 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
                   y: -100, 
                   x: Math.random() * 400 - 200,
                   rotate: Math.random() * 360,
+                  scale: 0,
                 }}
                 animate={{ 
                   y: 500, 
                   rotate: Math.random() * 360 + 720,
+                  scale: 1,
                 }}
                 transition={{ 
                   duration: 2,
                   delay: Math.random() * 0.5,
+                  ease: "easeOut",
                 }}
                 className="absolute w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded"
               />
@@ -76,9 +82,13 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
         )}
 
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
             <Sparkles className="w-8 h-8 text-white" />
-          </div>
+          </motion.div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Generating Your Portfolio
           </h2>
@@ -100,12 +110,17 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
                 animate={{ 
                   opacity: isActive || isCompleted ? 1 : 0.5,
                   scale: isActive ? 1.02 : 1,
+                  x: 0,
                 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className={`flex items-center space-x-4 p-4 rounded-lg transition-colors ${
                   isActive ? 'bg-blue-50 border border-blue-200' : 'bg-gray-50'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                <motion.div 
+                  animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                   isCompleted 
                     ? 'bg-green-100 text-green-600' 
                     : isActive 
@@ -113,19 +128,29 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
                     : 'bg-gray-200 text-gray-500'
                 }`}>
                   {isCompleted ? (
-                    <Check className="w-4 h-4" />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Check className="w-4 h-4" />
+                    </motion.div>
                   ) : (
-                    <IconComponent className={`w-4 h-4 ${isActive ? 'animate-pulse' : ''}`} />
+                    <IconComponent className={`w-4 h-4 ${isActive ? 'animate-spin' : ''}`} />
                   )}
-                </div>
+                </motion.div>
                 <span className={`font-medium ${
                   isActive || isCompleted ? 'text-gray-900' : 'text-gray-500'
                 }`}>
                   {step.label}
                   {isActive && (
-                    <span className="inline-block ml-2">
-                      <span className="animate-pulse">...</span>
-                    </span>
+                    <motion.span 
+                      animate={{ opacity: [1, 0.5, 1] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      className="inline-block ml-2"
+                    >
+                      ...
+                    </motion.span>
                   )}
                 </span>
               </motion.div>
@@ -139,7 +164,7 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
             initial={{ width: 0 }}
             animate={{ width: `${(currentStep / generationSteps.length) * 100}%` }}
             className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full"
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           />
         </div>
 

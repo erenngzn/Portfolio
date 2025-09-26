@@ -72,7 +72,7 @@ const LivePreview: React.FC = () => {
           </div>
 
           {/* Preview Content */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800">
             <AnimatePresence mode="wait">
               <motion.div
                 key={viewMode}
@@ -84,7 +84,7 @@ const LivePreview: React.FC = () => {
                   backgroundColor: selectedTheme.colors.background,
                   color: selectedTheme.colors.text,
                 }}
-                className="min-h-full"
+                className="min-h-full w-full"
               >
                 {/* Hero Section */}
                 <div

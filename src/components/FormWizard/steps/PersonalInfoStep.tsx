@@ -13,6 +13,7 @@ const PersonalInfoStep: React.FC = () => {
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<PersonalInfo>({
     defaultValues: personalInfo,
+    mode: 'onChange',
   });
 
   const watchedData = watch();
@@ -27,6 +28,16 @@ const PersonalInfoStep: React.FC = () => {
     }
   }, [watchedData, updateData]);
 
+  // Ensure form values are properly set when data changes
+  React.useEffect(() => {
+    if (personalInfo && Object.keys(personalInfo).length > 0) {
+      Object.entries(personalInfo).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          setValue(key as keyof PersonalInfo, value, { shouldDirty: false });
+        }
+      });
+    }
+  }, [personalInfo, setValue]);
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

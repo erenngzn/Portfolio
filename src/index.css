@@ -20,6 +20,8 @@ textarea,
 select {
   color: #111827 !important; /* Koyu gri text */
   background-color: white !important; /* Beyaz arka plan */
+  border: 1px solid #d1d5db !important;
+  transition: all 0.2s ease !important;
 }
 
 /* Placeholder text stilleri */
@@ -35,6 +37,9 @@ textarea:focus,
 select:focus {
   color: #111827 !important;
   background-color: white !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
 /* Disabled input'lar için */
@@ -51,6 +56,20 @@ select:disabled {
   background-color: white !important;
 }
 
+/* Input değerlerinin kaybolmaması için */
+input:not(:placeholder-shown) {
+  color: #111827 !important;
+  background-color: white !important;
+}
+
+/* Autocomplete stilleri */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #111827 !important;
+}
 /* Date picker input'ları için özel stil */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
@@ -65,4 +84,57 @@ input[type="file"] {
 select option {
   color: #111827 !important;
   background-color: white !important;
+}
+
+/* Scrollbar stilleri */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-slate-600::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 4px;
+}
+
+.scrollbar-track-slate-800::-webkit-scrollbar-track {
+  background-color: #1e293b;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Code viewer scrollbar */
+pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: #374151;
+  border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: #6b7280;
+  border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, textarea, select {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced focus states */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }

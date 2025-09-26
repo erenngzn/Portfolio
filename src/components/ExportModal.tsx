@@ -103,11 +103,12 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
             {/* Content Area */}
             <div className="flex-1 overflow-hidden">
               {activeTab === 'preview' && (
-                <div className="h-full p-6">
+                <div className="h-full p-4">
                   <iframe
                     srcDoc={html.replace('<link rel="stylesheet" href="styles.css">', `<style>${css}</style>`).replace('<script src="script.js"></script>', `<script>${js}</script>`)}
-                    className="w-full h-full border border-gray-300 rounded-lg"
+                    className="w-full h-[600px] border border-gray-300 rounded-lg bg-white"
                     title="Portfolio Preview"
+                    sandbox="allow-scripts allow-same-origin"
                   />
                 </div>
               )}
@@ -127,11 +128,13 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
                       Copy Code
                     </button>
                   </div>
-                  <pre className="flex-1 p-4 overflow-auto bg-gray-900 text-gray-100 text-sm">
+                  <div className="flex-1 overflow-hidden">
+                    <pre className="h-full p-4 overflow-auto bg-gray-900 text-gray-100 text-sm leading-relaxed">
                     <code>
                       {activeTab === 'html' ? html : activeTab === 'css' ? css : js}
                     </code>
                   </pre>
+                  </div>
                 </div>
               )}
             </div>

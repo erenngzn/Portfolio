@@ -26,6 +26,7 @@ const AboutStep: React.FC = () => {
 
   const { register, watch, setValue, formState: { errors } } = useForm<AboutInfo>({
     defaultValues: aboutInfo,
+    mode: 'onChange',
   });
 
   const watchedData = watch();
@@ -40,6 +41,16 @@ const AboutStep: React.FC = () => {
     }
   }, [watchedData, updateData]);
 
+  // Ensure form values are properly set when data changes
+  React.useEffect(() => {
+    if (aboutInfo && Object.keys(aboutInfo).length > 0) {
+      Object.entries(aboutInfo).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          setValue(key as keyof AboutInfo, value, { shouldDirty: false });
+        }
+      });
+    }
+  }, [aboutInfo, setValue]);
   const addSkill = (skill: string) => {
     const currentSkills = watchedData.skills || [];
     if (skill && !currentSkills.includes(skill)) {

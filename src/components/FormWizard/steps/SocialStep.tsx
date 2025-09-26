@@ -13,6 +13,7 @@ const SocialStep: React.FC = () => {
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<SocialLinks>({
     defaultValues: socialLinks,
+    mode: 'onChange',
   });
 
   const watchedData = watch();
@@ -28,6 +29,16 @@ const SocialStep: React.FC = () => {
     }
   }, [watchedData, updateData]);
 
+  // Ensure form values are properly set when data changes
+  React.useEffect(() => {
+    if (socialLinks && Object.keys(socialLinks).length > 0) {
+      Object.entries(socialLinks).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && typeof value === 'string') {
+          setValue(key as keyof SocialLinks, value, { shouldDirty: false });
+        }
+      });
+    }
+  }, [socialLinks, setValue]);
   const handleResumeUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
