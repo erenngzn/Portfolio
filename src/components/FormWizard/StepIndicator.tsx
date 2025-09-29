@@ -1,7 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, ArrowLeft } from 'lucide-react';
 import { usePortfolioStore } from '../../store/portfolioStore';
+
+interface StepIndicatorProps {
+  onBack?: () => void;
+}
 
 const steps = [
   'Personal Info',
@@ -11,11 +15,36 @@ const steps = [
   'Social & Contact',
 ];
 
-const StepIndicator: React.FC = () => {
+const StepIndicator: React.FC<StepIndicatorProps> = ({ onBack }) => {
   const { currentStep } = usePortfolioStore();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      {/* Back to Theme Selection Button */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Theme Selection</span>
+        </button>
+      )}
+      
+      {/* Step Progress */}
+      <div className="text-center mb-4">
+        <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 mb-2">
+          <span>Step 3 of 3</span>
+          <div className="w-32 bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-blue-600 rounded-full h-2"></div>
+          </div>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900">Build Your Portfolio</h2>
+        <p className="text-gray-600">Add your information to create your professional portfolio</p>
+      </div>
+      
+      {/* Form Steps */}
+      <div className="flex items-center justify-between">
       {steps.map((step, index) => (
         <div key={step} className="flex items-center flex-1">
           <div className="flex items-center">
@@ -51,6 +80,7 @@ const StepIndicator: React.FC = () => {
           )}
         </div>
       ))}
+      </div>
     </div>
   );
 };

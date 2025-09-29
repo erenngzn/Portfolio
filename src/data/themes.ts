@@ -1,6 +1,7 @@
 import { Theme } from '../types/portfolio';
 
 export const themes: Theme[] = [
+  // Existing colorful themes
   {
     id: 'modern-blue',
     name: 'Modern Blue',
@@ -70,5 +71,76 @@ export const themes: Theme[] = [
     },
     layout: 'modern',
     preview: 'https://images.pexels.com/photos/4348404/pexels-photo-4348404.jpeg?auto=compress&cs=tinysrgb&w=400',
+  },
+  // New professional themes
+  {
+    id: 'professional-gray',
+    name: 'Professional Gray',
+    colors: {
+      primary: '#4B5563',
+      secondary: '#374151',
+      accent: '#6B7280',
+      background: '#F9FAFB',
+      card: '#FFFFFF',
+      text: '#111827',
+    },
+    layout: 'classic',
+    preview: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400',
+  },
+  {
+    id: 'executive-white',
+    name: 'Executive White',
+    colors: {
+      primary: '#1F2937',
+      secondary: '#374151',
+      accent: '#9CA3AF',
+      background: '#FFFFFF',
+      card: '#F9FAFB',
+      text: '#111827',
+    },
+    layout: 'minimal',
+    preview: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=400',
+  },
+  {
+    id: 'corporate-black',
+    name: 'Corporate Black',
+    colors: {
+      primary: '#000000',
+      secondary: '#1F2937',
+      accent: '#6B7280',
+      background: '#FFFFFF',
+      card: '#F8FAFC',
+      text: '#111827',
+    },
+    layout: 'modern',
+    preview: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=400',
+  },
+  {
+    id: 'navy-formal',
+    name: 'Navy Formal',
+    colors: {
+      primary: '#1E3A8A',
+      secondary: '#1E40AF',
+      accent: '#3B82F6',
+      background: '#F8FAFC',
+      card: '#FFFFFF',
+      text: '#1F2937',
+    },
+    layout: 'classic',
+    preview: 'https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=400',
+  },
+  {
+    id: 'slate-professional',
+    name: 'Slate Professional',
+    colors: {
+      primary: '#475569',
+      secondary: '#334155',
+      accent: '#64748B',
+      background: '#F8FAFC',
+      card: '#FFFFFF',
+      text: '#0F172A',
+    },
+    layout: 'minimal',
+    preview: 'https://images.pexels.com/photos/3184317/pexels-photo-3184317.jpeg?auto=compress&cs=tinysrgb&w=400',
   },
 ];

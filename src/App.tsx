@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import ParticleBackground from './components/ParticleBackground';
-import ThemeSelector from './components/ThemeSelector';
+import LandingStep from './components/WizardSteps/LandingStep';
+import ThemeSelectionStep from './components/WizardSteps/ThemeSelectionStep';
 import FormWizard from './components/FormWizard/FormWizard';
 import LivePreview from './components/LivePreview';
 import GenerationProcess from './components/GenerationProcess';
 import ExportModal from './components/ExportModal';
 import { usePortfolioStore } from './store/portfolioStore';
 
-type AppMode = 'landing' | 'form' | 'preview' | 'generating' | 'export';
+type AppMode = 'landing' | 'theme-selection' | 'form' | 'preview' | 'generating' | 'export';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('landing');
@@ -25,7 +25,19 @@ function App() {
   }, []);
 
   const handleGetStarted = () => {
+    setMode('theme-selection');
+  };
+
+  const handleThemeSelected = () => {
     setMode('form');
+  };
+
+  const handleBackToThemes = () => {
+    setMode('theme-selection');
+  };
+
+  const handleBackToLanding = () => {
+    setMode('landing');
   };
 
   const handleGenerationComplete = () => {
@@ -43,63 +55,18 @@ function App() {
   return (
     <div className="min-h-screen">
       {mode === 'landing' && (
-        <div className="relative min-h-screen overflow-hidden">
-          <ParticleBackground />
-          <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-4">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                Create Your
-                <span className="bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
-                  {' '}Perfect{' '}
-                </span>
-                Portfolio
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed max-w-3xl mx-auto">
-                Build a stunning, professional portfolio website in minutes. 
-                Choose from beautiful themes, add your content, and export clean, 
-                production-ready code.
-              </p>
-              <button
-                onClick={handleGetStarted}
-                className="bg-white text-gray-900 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl"
-              >
-                Get Started →
-              </button>
-              
-              <div className="mt-16 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
-                  <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">🎨</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Beautiful Themes</h3>
-                  <p className="text-gray-300">Choose from professionally designed themes that look great on any device</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
-                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">⚡</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Lightning Fast</h3>
-                  <p className="text-gray-300">Build your portfolio in under 10 minutes with our intuitive step-by-step wizard</p>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
-                  <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">💻</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Export Code</h3>
-                  <p className="text-gray-300">Download clean HTML, CSS, and JavaScript ready for deployment anywhere</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <ThemeSelector />
-        </div>
+        <LandingStep onGetStarted={handleGetStarted} />
+      )}
+
+      {mode === 'theme-selection' && (
+        <ThemeSelectionStep 
+          onNext={handleThemeSelected}
+          onBack={handleBackToLanding}
+        />
       )}
 
       {mode === 'form' && (
-        <FormWizard />
+        <FormWizard onBack={handleBackToThemes} />
       )}
 
       {mode === 'preview' && (

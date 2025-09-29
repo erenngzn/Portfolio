@@ -10,6 +10,10 @@ import SocialStep from './steps/SocialStep';
 import LivePreview from '../LivePreview';
 import ModernParticleBackground from '../ParticleBackground';
 
+interface FormWizardProps {
+  onBack?: () => void;
+}
+
 const steps = [
   { title: 'Personal Info', component: PersonalInfoStep },
   { title: 'About Me', component: AboutStep },
@@ -18,7 +22,7 @@ const steps = [
   { title: 'Social & Contact', component: SocialStep },
 ];
 
-const FormWizard: React.FC = () => {
+const FormWizard: React.FC<FormWizardProps> = ({ onBack }) => {
   const { currentStep } = usePortfolioStore();
   const [isMobilePreview, setIsMobilePreview] = React.useState(false);
   const CurrentStepComponent = steps[currentStep].component;
@@ -39,7 +43,7 @@ const FormWizard: React.FC = () => {
       <div className="relative z-10 min-h-screen flex gap-0">
         <div className="lg:border-r border-gray-200 bg-white overflow-y-auto shadow-xl flex-1">
           <div className="p-6 lg:p-8">
-            <StepIndicator />
+            <StepIndicator onBack={onBack} />
             <motion.div
               key={currentStep}
               initial={{ opacity: 0, x: -20 }}
