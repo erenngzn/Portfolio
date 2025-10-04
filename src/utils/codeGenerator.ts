@@ -71,7 +71,7 @@ export const generatePortfolioCode = (data: PortfolioData): { html: string; css:
     <section id="about" class="about">
         <div class="container">
             <h2 class="section-title">About Me</h2>
-            ${about.summary ? `<p class="about-description">${about.summary}</p>` : ''}
+            ${about.summary ? `<div class="about-description">${about.summary}</div>` : ''}
             
             ${about.skills && about.skills.length > 0 ? `
             <div class="skills-section">
@@ -143,11 +143,14 @@ export const generatePortfolioCode = (data: PortfolioData): { html: string; css:
         <div class="container">
             <h2 class="section-title">Featured Projects</h2>
             <div class="projects-grid">
-                ${projects.map(project => `
+                ${projects.map((project, idx) => `
                 <div class="project-card">
                     ${project.images && project.images[0] ? `
-                    <div class="project-image">
+                    <div class="project-image" onclick="openGallery(${idx})">
                         <img src="${project.images[0]}" alt="${project.title}">
+                        ${project.images.length > 1 ? `
+                        <div class="image-count">+${project.images.length - 1} more</div>
+                        ` : ''}
                     </div>` : ''}
                     <div class="project-content">
                         <h3 class="project-title">${project.title}</h3>
@@ -200,6 +203,16 @@ export const generatePortfolioCode = (data: PortfolioData): { html: string; css:
             <p>&copy; ${new Date().getFullYear()} ${personalInfo.fullName || 'Portfolio'}. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Image Gallery Modal -->
+    <div id="galleryModal" class="gallery-modal">
+        <div class="gallery-close" onclick="closeGallery()">&times;</div>
+        <div class="gallery-counter"></div>
+        <button class="gallery-prev" onclick="changeImage(-1)">&#10094;</button>
+        <button class="gallery-next" onclick="changeImage(1)">&#10095;</button>
+        <img id="galleryImage" class="gallery-image" src="" alt="Project Image">
+        <div class="gallery-dots"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
@@ -649,6 +662,8 @@ section {
 .project-image {
     height: 200px;
     overflow: hidden;
+    position: relative;
+    cursor: pointer;
 }
 
 .project-image img {
@@ -660,6 +675,18 @@ section {
 
 .project-card:hover .project-image img {
     transform: scale(1.05);
+}
+
+.image-count {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
 
 .project-content {
@@ -773,6 +800,115 @@ section {
     color: white;
     text-align: center;
     padding: 2rem 0;
+}
+
+/* Gallery Modal */
+.gallery-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.gallery-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-image {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    animation: fadeIn 0.3s ease;
+}
+
+.gallery-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: color 0.3s;
+}
+
+.gallery-close:hover {
+    color: #bbb;
+}
+
+.gallery-prev,
+.gallery-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 30px;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    z-index: 10000;
+    transition: background-color 0.3s;
+    border-radius: 50%;
+}
+
+.gallery-prev:hover,
+.gallery-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.gallery-prev {
+    left: 20px;
+}
+
+.gallery-next {
+    right: 20px;
+}
+
+.gallery-counter {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    color: white;
+    font-size: 16px;
+    z-index: 10000;
+}
+
+.gallery-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10000;
+}
+
+.gallery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gallery-dot.active {
+    background-color: white;
+    width: 30px;
+    border-radius: 5px;
+}
+
+.gallery-dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Animations */
@@ -1043,6 +1179,68 @@ window.addEventListener('load', () => {
 });
 
 console.log('Portfolio website loaded successfully! 🚀');
+
+// Image Gallery functionality
+const projectsData = ${JSON.stringify(projects.map(p => ({ images: p.images || [] })))};
+let currentGalleryProject = 0;
+let currentImageIndex = 0;
+
+function openGallery(projectIndex) {
+    currentGalleryProject = projectIndex;
+    currentImageIndex = 0;
+    const modal = document.getElementById('galleryModal');
+    modal.classList.add('active');
+    updateGalleryImage();
+    document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+    const modal = document.getElementById('galleryModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function changeImage(direction) {
+    const images = projectsData[currentGalleryProject].images;
+    currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+    updateGalleryImage();
+}
+
+function updateGalleryImage() {
+    const images = projectsData[currentGalleryProject].images;
+    const galleryImage = document.getElementById('galleryImage');
+    const counter = document.querySelector('.gallery-counter');
+    const dotsContainer = document.querySelector('.gallery-dots');
+
+    galleryImage.src = images[currentImageIndex];
+    counter.textContent = \`\${currentImageIndex + 1} / \${images.length}\`;
+
+    dotsContainer.innerHTML = '';
+    images.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'gallery-dot' + (index === currentImageIndex ? ' active' : '');
+        dot.onclick = () => {
+            currentImageIndex = index;
+            updateGalleryImage();
+        };
+        dotsContainer.appendChild(dot);
+    });
+}
+
+document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('galleryModal');
+    if (modal.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') changeImage(-1);
+        if (e.key === 'ArrowRight') changeImage(1);
+        if (e.key === 'Escape') closeGallery();
+    }
+});
+
+document.getElementById('galleryModal').addEventListener('click', (e) => {
+    if (e.target.id === 'galleryModal') {
+        closeGallery();
+    }
+});
 `;
 
   return { html, css, js };

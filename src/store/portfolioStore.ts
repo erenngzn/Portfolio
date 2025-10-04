@@ -7,10 +7,12 @@ interface PortfolioStore {
   currentStep: number;
   isGenerating: boolean;
   generationProgress: number;
+  language: string;
   updateData: (section: keyof PortfolioData, value: any) => void;
   setCurrentStep: (step: number) => void;
   setGenerating: (generating: boolean) => void;
   setGenerationProgress: (progress: number) => void;
+  setLanguage: (language: string) => void;
   resetData: () => void;
 }
 
@@ -52,6 +54,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
       currentStep: 0,
       isGenerating: false,
       generationProgress: 0,
+      language: 'en',
       updateData: (section, value) => {
         set({
           data: {
@@ -63,6 +66,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
       setCurrentStep: (step) => set({ currentStep: step }),
       setGenerating: (generating) => set({ isGenerating: generating }),
       setGenerationProgress: (progress) => set({ generationProgress: progress }),
+      setLanguage: (language) => set({ language }),
       resetData: () => set({ data: initialData, currentStep: 0 }),
     }),
     {

@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ParticleBackground from '../ParticleBackground';
+import LanguageSelector from '../LanguageSelector';
+import { Language } from '../../utils/translations';
 
 interface LandingStepProps {
   onGetStarted: () => void;
 }
 
 const LandingStep: React.FC<LandingStepProps> = ({ onGetStarted }) => {
+  const [language, setLanguage] = useState<Language>('en');
+
+  React.useEffect(() => {
+    const savedLang = localStorage.getItem('portfolioLanguage') as Language;
+    if (savedLang) setLanguage(savedLang);
+  }, []);
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem('portfolioLanguage', lang);
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <ParticleBackground />
+      <div className="absolute top-6 right-6 z-20">
+        <LanguageSelector
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      </div>
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-4">
         <div className="max-w-4xl mx-auto">
           <motion.h1 

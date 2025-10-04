@@ -20,26 +20,31 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
   const [confetti, setConfetti] = useState(false);
 
   useEffect(() => {
-    const stepDuration = 4000; // 4 seconds per step (extended from 1.5s)
-    const stepDelay = 800; // 800ms delay between each step for smooth transitions
-    
-    generationSteps.forEach((_, index) => {
-      setTimeout(() => {
-        setCurrentStep(index + 1);
-        setGenerationProgress(((index + 1) / generationSteps.length) * 100);
-      }, (index + 1) * stepDuration + index * stepDelay);
-    });
+    const stepDuration = 2000;
+    let currentStepIndex = 0;
 
-    // Complete the process with extended timing
-    const totalDuration = generationSteps.length * stepDuration + (generationSteps.length - 1) * stepDelay;
-    setTimeout(() => {
-      setConfetti(true);
-      setTimeout(() => {
-        setGenerating(false);
-        onComplete();
-      }, 3000); // Extended confetti duration
-    }, totalDuration + 1000);
+    const advanceStep = () => {
+      if (currentStepIndex < generationSteps.length) {
+        setCurrentStep(currentStepIndex + 1);
+        setGenerationProgress(((currentStepIndex + 1) / generationSteps.length) * 100);
+        currentStepIndex++;
+        setTimeout(advanceStep, stepDuration);
+      } else {
+        setConfetti(true);
+        setTimeout(() => {
+          setGenerating(false);
+          onComplete();
+        }, 2000);
+      }
+    };
 
+    const initialTimer = setTimeout(() => {
+      advanceStep();
+    }, 500);
+
+    return () => {
+      clearTimeout(initialTimer);
+    };
   }, [setGenerating, setGenerationProgress, onComplete]);
 
   return (
@@ -58,21 +63,21 @@ const GenerationProcess: React.FC<GenerationProcessProps> = ({ onComplete }) => 
             transition={{ duration: 0.5 }}
             className="absolute inset-0 pointer-events-none"
           >
-            {[...Array(20)].map((_, i) => (
+            {Array.from({ length: 20 }).map((_, i) => (
               <motion.div
                 key={i}
-                initial={{ 
-                  y: -100, 
+                initial={{
+                  y: -100,
                   x: Math.random() * 400 - 200,
                   rotate: Math.random() * 360,
                   scale: 0,
                 }}
-                animate={{ 
-                  y: 500, 
+                animate={{
+                  y: 500,
                   rotate: Math.random() * 360 + 720,
                   scale: 1,
                 }}
-                transition={{ 
+                transition={{
                   duration: 2,
                   delay: Math.random() * 0.5,
                   ease: "easeOut",

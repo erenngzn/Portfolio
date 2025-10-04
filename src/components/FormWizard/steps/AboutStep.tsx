@@ -5,6 +5,7 @@ import { Plus, X, Star } from 'lucide-react';
 import { usePortfolioStore } from '../../../store/portfolioStore';
 import { AboutInfo } from '../../../types/portfolio';
 import StepNavigation from '../StepNavigation';
+import RichTextEditor from '../../RichTextEditor';
 
 const commonSkills = [
   'JavaScript', 'TypeScript', 'React', 'Vue', 'Angular', 'Node.js',
@@ -113,10 +114,9 @@ const AboutStep: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Professional Summary *
         </label>
-        <textarea
-          {...register('summary', { required: 'Professional summary is required' })}
-          rows={4}
-          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-400 text-sm resize-none"
+        <RichTextEditor
+          value={watchedData.summary || ''}
+          onChange={(value) => setValue('summary', value)}
           placeholder="I'm a passionate frontend developer with 3+ years of experience..."
         />
         {errors.summary && (

@@ -13,19 +13,22 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
   const { data } = usePortfolioStore();
   const [activeTab, setActiveTab] = useState<'preview' | 'html' | 'css' | 'js'>('preview');
   const [isDownloading, setIsDownloading] = useState(false);
+  const [copySuccess, setCopySuccess] = useState<string | null>(null);
 
   const { html, css, js } = generatePortfolioCode(data as any);
 
   const handleDownload = async () => {
     setIsDownloading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing
+    await new Promise(resolve => setTimeout(resolve, 1000));
     downloadPortfolio(data as any);
     setIsDownloading(false);
   };
 
-  const copyToClipboard = (content: string) => {
-    navigator.clipboard.writeText(content);
-    // You could add a toast notification here
+  const copyToClipboard = (content: string, type: string) => {
+    navigator.clipboard.writeText(content).then(() => {
+      setCopySuccess(type);
+      setTimeout(() => setCopySuccess(null), 2000);
+    });
   };
 
   return (
@@ -122,19 +125,34 @@ const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
                     </span>
                     <button
                       onClick={() => copyToClipboard(
-                        activeTab === 'html' ? html : activeTab === 'css' ? css : js
+                        activeTab === 'html' ? html : activeTab === 'css' ? css : js,
+                        activeTab.toUpperCase()
                       )}
-                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                      className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center space-x-2"
                     >
-                      Copy Code
+                      {copySuccess === activeTab.toUpperCase() ? (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <span>Copy Code</span>
+                        </>
+                      )}
                     </button>
                   </div>
-                  <div className="flex-1 overflow-hidden">
-                    <pre className="h-full p-4 overflow-auto bg-gray-900 text-gray-100 text-sm leading-relaxed">
-                    <code>
-                      {activeTab === 'html' ? html : activeTab === 'css' ? css : js}
-                    </code>
-                  </pre>
+                  <div className="flex-1 overflow-auto bg-gray-900">
+                    <pre className="p-4 text-gray-100 text-sm leading-relaxed font-mono">
+                      <code>
+                        {activeTab === 'html' ? html : activeTab === 'css' ? css : js}
+                      </code>
+                    </pre>
                   </div>
                 </div>
               )}

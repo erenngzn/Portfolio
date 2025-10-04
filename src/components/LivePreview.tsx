@@ -3,10 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Monitor, Smartphone, ExternalLink } from 'lucide-react';
 import { usePortfolioStore } from '../store/portfolioStore';
 import { themes } from '../data/themes';
+import ImageGalleryModal from './ImageGalleryModal';
 
 const LivePreview: React.FC = () => {
   const { data } = usePortfolioStore();
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   
   // FormWizard'a mobil durumunu bildirmek için
   React.useEffect(() => {
@@ -142,9 +146,10 @@ const LivePreview: React.FC = () => {
                     
                     {about?.summary && (
                       <div className="mb-12">
-                        <p className="text-lg leading-relaxed text-center max-w-3xl mx-auto">
-                          {about.summary}
-                        </p>
+                        <div
+                          className="text-lg leading-relaxed text-center max-w-3xl mx-auto"
+                          dangerouslySetInnerHTML={{ __html: about.summary }}
+                        />
                       </div>
                     )}
 
@@ -284,12 +289,24 @@ const LivePreview: React.FC = () => {
                             style={{ backgroundColor: selectedTheme.colors.card }}
                           >
                             {project.images && project.images[0] && (
-                              <div className="h-48 bg-gray-200">
+                              <div
+                                className="h-48 bg-gray-200 cursor-pointer relative group"
+                                onClick={() => {
+                                  setSelectedImages(project.images);
+                                  setSelectedImageIndex(0);
+                                  setGalleryOpen(true);
+                                }}
+                              >
                                 <img
                                   src={project.images[0]}
                                   alt={project.title}
-                                  className="w-full h-full object-cover"
+                                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
                                 />
+                                {project.images.length > 1 && (
+                                  <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                                    +{project.images.length - 1} more
+                                  </div>
+                                )}
                               </div>
                             )}
                             <div className="p-6">
@@ -353,6 +370,13 @@ const LivePreview: React.FC = () => {
           </div>
         </motion.div>
       </div>
+
+      <ImageGalleryModal
+        images={selectedImages}
+        isOpen={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        initialIndex={selectedImageIndex}
+      />
     </div>
   );
 };
